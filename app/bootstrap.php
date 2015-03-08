@@ -22,6 +22,7 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), [
 // Logging
 $app->register(new Silex\Provider\MonologServiceProvider(), [
     'monolog.logfile' => __DIR__ . '/logs/app.log',
+    'monolog.name' => 'api-cms'
 ]);
 
 // Security

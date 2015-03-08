@@ -51,6 +51,8 @@ class UserController extends BaseController
     }
 
     /**
+     * Delete a User
+     *
      * @param Application $app
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
@@ -62,6 +64,8 @@ class UserController extends BaseController
     }
 
     /**
+     * Create a User
+     *
      * @param Application $app
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
