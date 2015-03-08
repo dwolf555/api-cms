@@ -11,5 +11,5 @@ database:
     host: localhost
     user: root
     password:
-    dbname: database1
+    dbname: apicms
     charset: utf8

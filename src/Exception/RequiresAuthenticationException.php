@@ -5,7 +5,7 @@
  * Time: 11:23 AM
  */
 
-namespace SilexStarter\Exception;
+namespace APICMS\Exception;
 
 
 class RequiresAuthenticationException extends \Exception {}

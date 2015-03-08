@@ -21,17 +21,25 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), [
 
 // Logging
 $app->register(new Silex\Provider\MonologServiceProvider(), [
-        'monolog.logfile' => __DIR__ . '/logs/app.log',
+    'monolog.logfile' => __DIR__ . '/logs/app.log',
 ]);
 
 // Security
-//$app->register(new Silex\Provider\SecurityServiceProvider());
+$app->register(new Silex\Provider\SecurityServiceProvider(), [
+    'security.firewalls' => []
+]);
+$app['security.encoder.bcrypt'] = $app->share(function ($app) {
+    return new \Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder(10);
+});
 
 // Cache
-//$app->register(new Silex\Provider\HttpCacheServiceProvider(), [
-//    'http_cache.cache_dir' => __DIR__ . '/cache/',
-//]);
-//
+$app->register(new Silex\Provider\HttpCacheServiceProvider(), [
+    'http_cache.cache_dir' => __DIR__ . '/cache/',
+]);
+
+// Validation
+$app->register(new Silex\Provider\ValidatorServiceProvider());
+
 // Templates
 //$app->register(new Silex\Provider\TwigServiceProvider(), [
 //    'twig.path' => dirname(__DIR__) . '/frontend/twig',

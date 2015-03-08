@@ -16,14 +16,16 @@
         "silex/silex": "~1.2",
         "doctrine/dbal": "~2.5",
         "symfony/console": "~2.6",
+        "symfony/security": "~2.6",
         "symfony/yaml": "~2.6",
         "deralex/yaml-config-service-provider": "~1.0",
         "knplabs/console-service-provider": "dev-master",
         "robmorgan/phinx": "dev-master",
-        "monolog/monolog": "1.13.*@dev"
+        "monolog/monolog": "1.13.*@dev",
+        "symfony/validator": "~3.0@dev"
     },
 
     "autoload": {
-        "psr-4": {"SilexStarter\\": "src/"}
+        "psr-4": {"APICMS\\": "src/"}
     }
 }

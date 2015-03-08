@@ -5,10 +5,10 @@
  * Time: 3:56 PM
  */
 
-namespace SilexStarter\Controller;
+namespace APICMS\Controller;
 
 use Silex\Application;
-use SilexStarter\QueryRepository\UserQueryRepository;
+use APICMS\QueryRepository\UserQueryRepository;
 use Symfony\Component\HttpFoundation\Request;
 
 class HomeController {

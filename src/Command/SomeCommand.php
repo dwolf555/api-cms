@@ -6,7 +6,7 @@
  * Time: 7:08 PM
  */
 
-namespace SilexStarter\Command;
+namespace APICMS\Command;
 
 
 use Knp\Command\Command;

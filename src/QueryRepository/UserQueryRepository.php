@@ -1,6 +1,6 @@
 <?php
 
-namespace SilexStarter\QueryRepository;
+namespace APICMS\QueryRepository;
 
 class UserQueryRepository extends AbstractQueryRepository {
 
