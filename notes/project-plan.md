@@ -1,28 +1,43 @@
 # Project Plan
 
-## What problem are we trying to solve?
+## General
 
-99% of the work in creating an api is bootstrapping an application and doing 
-general CRUD operations. I'd like to be able to quickly create the baseline for 
-an API by creating entities and fields in a friendly user interface.
-When more complicated work is needed, it should be easy to extend functionality.
+### API
 
-## How will we solve this problem?
+- Pagination
+- Sorting
+- Searching
 
-A/C will allow a web-friendly admin to set up the application, create users and roles, entities and fields.
-These elements will be available from standard restful endpoints.
-An emphasis will be put on doing the grunt work but not overstepping bounds.
-It should be up to a developer to extend functionality when necessary, and the process should be straight forward.
+## Users
 
-## Credo
+### API
 
-- Never forget about the users. 
-- Get feedback often. 
-- Always consider best practice. 
-- Don't try to do too much.
+#### Authentication
 
-## Must haves
+- Login
+- Logout
+- Forgot
+- Reset
 
-- Easily add new field types
-- Allow for developers to replace routes or prepend and append routes with logic to add functionality.
-- Never break abstraction and allow developers to replace adapters at bootstrap.
+#### Roles
+
+#### CRUD Operations
+
+- Create User
+- Update User
+- Get User
+- List Users
+
+### CMS
+
+#### Management
+
+## Entities
+
+### API
+
+#### CRUD Operations
+
+-  Table Structure
+
+
