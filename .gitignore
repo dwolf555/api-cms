@@ -1,5 +1,5 @@
 composer.phar
 vendor/
 app/cache/
-app/logs
+app/logs/app.log
 frontend/node_modules
