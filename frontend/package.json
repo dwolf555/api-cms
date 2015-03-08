@@ -1,0 +1,18 @@
+{
+  "name": "api-cms",
+  "version": "0.0.1",
+  "description": "A CMS to quickly create an API backend for your web or mobile application.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dwolf555/api-cms"
+  },
+  "author": "Daniel Wolf <danielrwolf5@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dwolf555/api-cms/issues"
+  },
+  "homepage": "https://github.com/dwolf555/api-cms",
+  "dependencies": {
+    "grunt": "^0.4.5"
+  }
+}
