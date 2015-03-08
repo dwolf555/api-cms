@@ -26,7 +26,7 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), [
 $app->register(new Silex\Provider\MonologServiceProvider(), [
     'monolog.logfile' => __DIR__ . '/logs/app.log',
     'monolog.name' => 'api-cms',
-    'monolog.level' => 'DEBUG'
+    'monolog.level' => 'DEBUG' //todo get from config
 ]);
 
 // Cache
@@ -37,11 +37,6 @@ $app->register(new Silex\Provider\HttpCacheServiceProvider(), [
 // Validation
 $app->register(new Silex\Provider\ValidatorServiceProvider());
 
-// Templates
-//$app->register(new Silex\Provider\TwigServiceProvider(), [
-//    'twig.path' => dirname(__DIR__) . '/frontend/twig',
-//]);
-//
 // Console Commands
 //$app->register(new Knp\Provider\ConsoleServiceProvider(), [
 //    'console.name'              => $app['config']['name'],
