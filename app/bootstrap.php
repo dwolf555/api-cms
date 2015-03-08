@@ -16,22 +16,18 @@ $app['debug'] = $app['config']['debug'];
 
 // Database
 $app->register(new Silex\Provider\DoctrineServiceProvider(), [
-    'db.options' => $app['config']['database']
+    'db.options' => $app['config']['database'],
+    'encoder.bcrypt' => $app->share(function ($app) {
+        return new \Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder(10);
+    })
 ]);
 
 // Logging
 $app->register(new Silex\Provider\MonologServiceProvider(), [
     'monolog.logfile' => __DIR__ . '/logs/app.log',
-    'monolog.name' => 'api-cms'
+    'monolog.name' => 'api-cms',
+    'monolog.level' => 'DEBUG'
 ]);
-
-// Security
-$app->register(new Silex\Provider\SecurityServiceProvider(), [
-    'security.firewalls' => []
-]);
-$app['security.encoder.bcrypt'] = $app->share(function ($app) {
-    return new \Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder(10);
-});
 
 // Cache
 $app->register(new Silex\Provider\HttpCacheServiceProvider(), [

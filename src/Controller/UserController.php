@@ -92,7 +92,7 @@ class UserController extends BaseController
         }
 
         // encrypt password
-        $encoder = $app['security.encoder.bcrypt'];
+        $encoder = $app['encoder.bcrypt'];
         $input['password'] = $encoder->encodePassword($input['password'], null);
 
         // create user
