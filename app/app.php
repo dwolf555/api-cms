@@ -11,10 +11,11 @@ $app->post('/logout', 'APICMS\Controller\AuthController::logout');
 $app->post('/forgot', 'APICMS\Controller\AuthController::forgot');
 $app->post('/reset', 'APICMS\Controller\AuthController::reset');
 
-$app->get('/users', 'APICMS\Controller\UserController::getList');
-$app->post('/users', 'APICMS\Controller\UserController::post');
-$app->match('/users/{userId}', 'APICMS\Controller\UserController::singleRoute')
+$app->get('/users.{format}', 'APICMS\Controller\UserController::getList')->assert("format", "xml|json");
+$app->post('/users.{format}', 'APICMS\Controller\UserController::post')->assert("format", "xml|json");
+$app->match('/users/{userId}.{format}', 'APICMS\Controller\UserController::singleRoute')
     ->assert('userId', '\d+')
+    ->assert("format", "xml|json")
     ->method('GET|PUT|DELETE');
 
 // Security
