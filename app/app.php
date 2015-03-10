@@ -16,9 +16,12 @@ foreach (['user', 'role'] as $single) {
     // todo this is hard to read
     $plural = $single . 's';
     $capital = ucfirst($single);
-    $app->get('/' . $single, 'APICMS\Controller\\' . $capital . 'Controller::getList');
-    $app->post('/' . $single, 'APICMS\Controller\\' . $capital . 'Controller::post');
-    $app->match('/' . $single . '/{' . $single . 'Id}', 'APICMS\Controller\\' . $capital . 'Controller::singleRouter')
+    $app->get('/' . $single . '.{format}', 'APICMS\Controller\\' . $capital . 'Controller::getList')
+    ->assert('format', 'xml|json');
+    $app->post('/' . $single . '.{format}', 'APICMS\Controller\\' . $capital . 'Controller::post')
+    ->assert('format', 'xml|json');
+    $app->match('/' . $single . '/{' . $single . 'Id}.{format}', 'APICMS\Controller\\' . $capital . 'Controller::singleRouter')
+        ->assert('format', 'xml|json')
         ->assert($single . 'Id', '\d+')
         ->method('GET|PUT|DELETE');
 }

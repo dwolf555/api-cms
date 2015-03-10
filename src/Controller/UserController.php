@@ -22,9 +22,9 @@ class UserController extends BaseController
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      * @todo: throws
      */
-    public function singleRouter(Application $app, Request $request, $userId)
+    public function singleRouter(Application $app, Request $request, $userId, $format)
     {
-        return $this->{strtolower($request->getMethod())}($app, $request, $userId);
+        return $this->{strtolower($request->getMethod())}($app, $request, $userId, $format);
     }
 
     /**
