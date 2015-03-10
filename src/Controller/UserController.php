@@ -22,18 +22,7 @@ class UserController extends BaseController
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      * @todo: throws
      */
-    public function singleRouter(Application $app, Request $request, $userId, $format)
-    {
-        return $this->{strtolower($request->getMethod())}($app, $request, $userId, $format);
-    }
-
-    /**
-     * @param Application $app
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     * @todo: throws
-     */
-    public function get(Application $app, Request $request, $userId)
+    public function get(Application $app, Request $request, $userId, $format)
     {
         //todo check permissions
         $query = $app['db']->createQueryBuilder()
@@ -62,7 +51,7 @@ class UserController extends BaseController
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      * @todo: throws
      */
-    public function put(Application $app, Request $request, $userId)
+    public function put(Application $app, Request $request, $userId, $format)
     {
         // todo check perms
         $input = $request->request->all();
@@ -115,7 +104,7 @@ class UserController extends BaseController
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      * @todo: throws
      */
-    public function delete(Application $app, Request $request, $userId)
+    public function delete(Application $app, Request $request, $userId, $format)
     {
         //todo check perms
         $app['db']->delete('users', ['id' => $userId]);
@@ -129,7 +118,7 @@ class UserController extends BaseController
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function post(Application $app, Request $request)
+    public function post(Application $app, Request $request, $format)
     {
         $input = $request->request->all();
 

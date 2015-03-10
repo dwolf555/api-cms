@@ -13,19 +13,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class RoleController extends BaseController
+class RoleController extends AbstractEntityController
 {
-
-    /**
-     * @param Application $app
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     * @todo: throws
-     */
-    public function singleRouter(Application $app, Request $request, $roleId)
-    {
-        return $this->{strtolower($request->getMethod())}($app, $request, $roleId);
-    }
 
     /**
      * @param Application $app
