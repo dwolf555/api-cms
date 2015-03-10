@@ -13,14 +13,13 @@ $app->post('/reset', 'APICMS\Controller\AuthController::reset');
 
 // Base CRUD operations
 foreach (['user', 'role'] as $single) {
-    // todo this is hard to read
     $plural = $single . 's';
     $capital = ucfirst($single);
-    $app->get('/' . $single . '.{format}', 'APICMS\Controller\\' . $capital . 'Controller::getList')
+    $app->get("/{$single}.{format}", "APICMS\\Controller\\{$capital}Controller::getList")
         ->assert('format', 'xml|json');
-    $app->post('/' . $single . '.{format}', 'APICMS\Controller\\' . $capital . 'Controller::post')
+    $app->post("/{$single}.{format}", "APICMS\\Controller\\{$capital}Controller::post")
         ->assert('format', 'xml|json');
-    $app->match('/' . $single . '/{id}.{format}', 'APICMS\Controller\\' . $capital . 'Controller::singleRouter')
+    $app->match("/{$single}/{id}.{format}", "APICMS\\Controller\\{$capital}Controller::singleRouter")
         ->assert('id', '\d+')
         ->assert('format', 'xml|json')
         ->method('GET|PUT|DELETE');
