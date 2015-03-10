@@ -11,11 +11,17 @@ $app->post('/logout', 'APICMS\Controller\AuthController::logout');
 $app->post('/forgot', 'APICMS\Controller\AuthController::forgot');
 $app->post('/reset', 'APICMS\Controller\AuthController::reset');
 
-$app->get('/users', 'APICMS\Controller\UserController::getList');
-$app->post('/users', 'APICMS\Controller\UserController::post');
-$app->match('/users/{userId}', 'APICMS\Controller\UserController::singleRoute')
-    ->assert('userId', '\d+')
-    ->method('GET|PUT|DELETE');
+// Base CRUD operations
+foreach (['user', 'role'] as $single) {
+    // todo this is hard to read
+    $plural = $single . 's';
+    $capital = ucfirst($single);
+    $app->get('/' . $single, 'APICMS\Controller\\' . $capital . 'Controller::getList');
+    $app->post('/' . $single, 'APICMS\Controller\\' . $capital . 'Controller::post');
+    $app->match('/' . $single . '/{' . $single . 'Id}', 'APICMS\Controller\\' . $capital . 'Controller::singleRouter')
+        ->assert($single . 'Id', '\d+')
+        ->method('GET|PUT|DELETE');
+}
 
 // Security
 $secureRoutes = [ // TODO: get secure routes list from config

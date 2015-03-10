@@ -26,3 +26,4 @@ It should be up to a developer to extend functionality when necessary, and the p
 - Easily add new field types
 - Allow for developers to replace routes or prepend and append routes with logic to add functionality.
 - Never break abstraction and allow developers to replace adapters at bootstrap.
+- Dynamic settings stored in the database but intelligent caching strategy
