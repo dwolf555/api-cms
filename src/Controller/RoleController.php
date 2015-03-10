@@ -22,7 +22,7 @@ class RoleController extends AbstractEntityController
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      * @todo: throws
      */
-    public function get(Application $app, Request $request, $roleId)
+    public function get(Application $app, Request $request, $roleId, $format)
     {
         //todo check permissions
         $query = $app['db']->createQueryBuilder()
@@ -51,7 +51,7 @@ class RoleController extends AbstractEntityController
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      * @todo: throws
      */
-    public function put(Application $app, Request $request, $roleId)
+    public function put(Application $app, Request $request, $roleId, $format)
     {
         return 'put';
     }
@@ -64,11 +64,16 @@ class RoleController extends AbstractEntityController
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      * @todo: throws
      */
-    public function delete(Application $app, Request $request, $roleId)
+    public function delete(Application $app, Request $request, $roleId, $format)
     {
         //todo check perms
-        $app['db']->delete('roles', ['id' => $roleId]);
-        return $this->jsonResponse('success', ['message' => 'Role deleted successfully.'], 200);
+        $affectedRows = $app['db']->delete('roles', ['id' => $roleId]);
+        if ($affectedRows) {
+            return $this->jsonResponse('success', ['message' => 'Role deleted successfully.'], 200);
+        } else {
+            return $this->jsonResponse('error', ['message' => 'Role not found.'], 404);
+        }
+        // todo return 404 if doesn't exist?
     }
 
     /**
@@ -78,7 +83,7 @@ class RoleController extends AbstractEntityController
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function post(Application $app, Request $request)
+    public function post(Application $app, Request $request, $format)
     {
         $input = $request->request->all();
 
@@ -119,7 +124,7 @@ class RoleController extends AbstractEntityController
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      * @todo: throws
      */
-    public function getList(Application $app, Request $request)
+    public function getList(Application $app, Request $request, $format)
     {
         return 'list';
         // TODO

@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-abstract class AbstractEntityController
+abstract class AbstractEntityController implements EntityControllerInterface
 {
     /**
      * @param Application $app
@@ -15,7 +15,7 @@ abstract class AbstractEntityController
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      * @todo: throws
      */
-    public function singleRouter(Application $app, Request $request, $userId, $format)
+    public function singleRouter(Application $app, Request $request, $id, $format)
     {
         return $this->{strtolower($request->getMethod())}($app, $request, $userId, $format);
     }
@@ -49,7 +49,7 @@ abstract class AbstractEntityController
      * @return Response
      */
     public function getList(Application $app, Request $request, $format) {
-        return $this->jsonResponse('error', ['message' => 'Not found.'], 404);
+        return $this->jsonResponse('error', ['message' => 'Not found.'], 400);
     }
 
     /**
@@ -60,7 +60,7 @@ abstract class AbstractEntityController
      * @return Response
      */
     public function get(Application $app, Request $request, $roleId, $format) {
-        return $this->jsonResponse('error', ['message' => 'Not found.'], 404);
+        return $this->jsonResponse('error', ['message' => 'Not found.'], 400);
     }
 
     /**
@@ -70,7 +70,7 @@ abstract class AbstractEntityController
      * @return Response
      */
     public function post(Application $app, Request $request, $format) {
-        return $this->jsonResponse('error', ['message' => 'Not found.'], 404);
+        return $this->jsonResponse('error', ['message' => 'Not found.'], 400);
     }
 
     /**
@@ -81,7 +81,7 @@ abstract class AbstractEntityController
      * @return Response
      */
     public function put(Application $app, Request $request, $roleId, $format) {
-        return $this->jsonResponse('error', ['message' => 'Not found.'], 404);
+        return $this->jsonResponse('error', ['message' => 'Not found.'], 400);
     }
 
     /**
@@ -92,6 +92,6 @@ abstract class AbstractEntityController
      * @return Response
      */
     public function delete(Application $app, Request $request, $roleId, $format) {
-        return $this->jsonResponse('error', ['message' => 'Not found.'], 404);
+        return $this->jsonResponse('error', ['message' => 'Not found.'], 400);
     }
 }
