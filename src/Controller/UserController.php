@@ -10,6 +10,7 @@ namespace APICMS\Controller;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class UserController extends AbstractEntityController
@@ -167,7 +168,6 @@ class UserController extends AbstractEntityController
         $query = $app['db']->createQueryBuilder();
         $query->select(self::SELECT_STATEMENT)
             ->from('users', 'u');
-        $data = $app['db']->fetchAll($query->getSQL(), $query->getParameters());
-        return $this->jsonResponse(self::OK_STATUS, $data, 200);
+        return $this->paginate($app, $query);
     }
 }

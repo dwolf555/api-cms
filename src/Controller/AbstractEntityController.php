@@ -3,6 +3,7 @@
 namespace APICMS\Controller;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,6 +15,7 @@ abstract class AbstractEntityController implements EntityControllerInterface
     const NOT_FOUND_MSG = 'Not Found';
     const OK_STATUS = 'success';
     const SELECT_STATEMENT = '*';
+    const QUERY_LIMIT = 25;
 
     /**
      * @param Application $app
@@ -52,6 +54,33 @@ abstract class AbstractEntityController implements EntityControllerInterface
             'status' => $status,
             'data' => $data
         ], $code);
+    }
+
+    protected function paginate(Application $app, QueryBuilder $query)
+    {
+        $page = $app['request']->query->get('page', 1);
+        $select = implode(', ', $query->getQueryPart('select'));
+
+        $query->select('COUNT(0) as count')->setMaxResults(1);
+        $count = $app['db']->fetchColumn($query->getSQL(), $query->getParameters(), 0);
+
+        $query->select($select)->setMaxResults(self::QUERY_LIMIT)->setFirstResult(($page - 1) * self::QUERY_LIMIT);
+        $results = $app['db']->fetchAll($query->getSQL(), $query->getParameters());
+
+        if (count($results) === 0) {
+            return $this->jsonResponse(self::ERR_STATUS, [
+                'message' => self::NOT_FOUND_MSG
+            ], 404);
+        }
+
+        return $this->jsonResponse(self::OK_STATUS, [
+            'pagination' => [
+                'total' => (int) $count,
+                'totalPages' => ceil($count / self::QUERY_LIMIT),
+                'page' => (int) $page
+            ],
+            'results' => $results
+        ], 200);
     }
 
     /**

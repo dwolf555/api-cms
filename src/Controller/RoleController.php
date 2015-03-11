@@ -147,7 +147,6 @@ class RoleController extends BaseController
         $query = $app['db']->createQueryBuilder()
             ->select(self::SELECT_STATEMENT)
             ->from('roles', 'r');
-        $results = $app['db']->fetchAll($query->getSQL(), $query->getParameters());
-        return $this->jsonResponse(BaseController::OK_STATUS, $results, 200);
+        return $this->paginate($app, $query);
     }
 }
