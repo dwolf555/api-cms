@@ -9,6 +9,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 abstract class AbstractEntityController implements EntityControllerInterface
 {
+    const OK_STATUS = 'ok';
+    const ERR_STATUS = 'error';
+    const NOT_FOUND_MSG = 'Not found.';
+
     /**
      * @param Application $app
      * @param Request $request

@@ -23,7 +23,7 @@ class UserController extends AbstractEntityController
     {
         //todo check permissions
         $query = $app['db']->createQueryBuilder()
-            ->select('u.id, u.email')
+            ->select('u.id, u.email, DATE_FORMAT(u.created, "%Y-%m-%dT%TZ") as created')
             ->from('users', 'u')
             ->where('u.id = :user_id')
             ->setParameter('user_id', $userId);
@@ -34,12 +34,12 @@ class UserController extends AbstractEntityController
         );
 
         if (!$user) {
-            return $this->jsonResponse('error', [
-                'message' => 'User not found.'
+            return $this->jsonResponse(AbstractEntityController::ERR_STATUS, [
+                'message' => AbstractEntityController::NOT_FOUND_MSG
             ], 404);
         }
 
-        return $this->jsonResponse('success', $user, 200);
+        return $this->jsonResponse(AbstractEntityController::OK_STATUS, $user, 200);
     }
 
     /**
@@ -64,7 +64,7 @@ class UserController extends AbstractEntityController
             foreach ($errors as $e) {
                 $errorArray[$e->getPropertyPath()] = $e->getMessage();
             }
-            return $this->jsonResponse('error', $errorArray, 400);
+            return $this->jsonResponse(AbstractEntityController::ERR_STATUS, $errorArray, 400);
         }
 
         // encrypt password
@@ -77,7 +77,7 @@ class UserController extends AbstractEntityController
         try {
             $app['db']->update('users', $input, ['id' => $userId]);
         } catch (UniqueConstraintViolationException $e) {
-            return $this->jsonResponse('error', [
+            return $this->jsonResponse(AbstractEntityController::ERR_STATUS, [
                 '[email]' => 'This email address has already been registered.'
             ], 400);
         }
@@ -87,7 +87,7 @@ class UserController extends AbstractEntityController
         unset($response['password']);
         $response['id'] = $app['db']->lastInsertId();
 
-        return new JsonResponse($response, 200);
+        return $this->jsonResponse(AbstractEntityController::OK_STATUS, $response, 200);
     }
 
     /**
@@ -96,8 +96,16 @@ class UserController extends AbstractEntityController
     public function delete(Application $app, Request $request, $userId)
     {
         //todo check perms
-        $app['db']->delete('users', ['id' => $userId]);
-        return $this->jsonResponse('success', ['message' => 'User deleted successfully.'], 200);
+        $affectedRows = $app['db']->delete('users', ['id' => $userId]);
+        if ($affectedRows) {
+            return $this->jsonResponse(AbstractEntityController::OK_STATUS, ['message' => 'User deleted successfully.'], 200);
+        } else {
+            return $this->jsonResponse(
+                AbstractEntityController::ERR_STATUS,
+                ['message' => AbstractEntityController::NOT_FOUND_MSG],
+                404
+            );
+        }
     }
 
     /**
@@ -121,7 +129,7 @@ class UserController extends AbstractEntityController
             foreach ($errors as $e) {
                 $errorArray[$e->getPropertyPath()] = $e->getMessage();
             }
-            return $this->jsonResponse('error', $errorArray, 400);
+            return $this->jsonResponse(AbstractEntityController::ERR_STATUS, $errorArray, 400);
         }
 
         // encrypt password
@@ -132,7 +140,7 @@ class UserController extends AbstractEntityController
         try {
             $app['db']->insert('users', $input);
         } catch (UniqueConstraintViolationException $e) {
-            return $this->jsonResponse('error', [
+            return $this->jsonResponse(AbstractEntityController::ERR_STATUS, [
                 '[email]' => 'This email address has already been registered.'
             ], 400);
         }
@@ -142,7 +150,7 @@ class UserController extends AbstractEntityController
         unset($response['password']);
         $response['id'] = $app['db']->lastInsertId();
 
-        return new JsonResponse($response, 201);
+        return $this->jsonResponse(AbstractEntityController::OK_STATUS, $response, 201);
     }
 
     /**
@@ -152,10 +160,9 @@ class UserController extends AbstractEntityController
     {
         // todo check perms
         $query = $app['db']->createQueryBuilder();
-        $query->select()
-            ->from()
-            ->
-        $app['db']->fetchAll();
-        return 'list';
+        $query->select('u.id, u.email, DATE_FORMAT(u.created, "%Y-%m-%dT%TZ") as created')
+            ->from('users', 'u');
+        $data = $app['db']->fetchAll($query->getSQL(), $query->getParameters());
+        return $this->jsonResponse(AbstractEntityController::OK_STATUS, $data, 200);
     }
 }
