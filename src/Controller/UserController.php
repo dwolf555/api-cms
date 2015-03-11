@@ -17,12 +17,9 @@ class UserController extends AbstractEntityController
 {
 
     /**
-     * @param Application $app
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     * @todo: throws
+     * {@inheritdoc}
      */
-    public function get(Application $app, Request $request, $userId, $format)
+    public function get(Application $app, Request $request, $userId)
     {
         //todo check permissions
         $query = $app['db']->createQueryBuilder()
@@ -46,12 +43,9 @@ class UserController extends AbstractEntityController
     }
 
     /**
-     * @param Application $app
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     * @todo: throws
+     * {@inheritdoc}
      */
-    public function put(Application $app, Request $request, $userId, $format)
+    public function put(Application $app, Request $request, $userId)
     {
         // todo check perms
         $input = $request->request->all();
@@ -97,14 +91,9 @@ class UserController extends AbstractEntityController
     }
 
     /**
-     * Delete a User
-     *
-     * @param Application $app
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     * @todo: throws
+     * {@inheritdoc}
      */
-    public function delete(Application $app, Request $request, $userId, $format)
+    public function delete(Application $app, Request $request, $userId)
     {
         //todo check perms
         $app['db']->delete('users', ['id' => $userId]);
@@ -112,13 +101,9 @@ class UserController extends AbstractEntityController
     }
 
     /**
-     * Create a User
-     *
-     * @param Application $app
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * {@inheritdoc}
      */
-    public function post(Application $app, Request $request, $format)
+    public function post(Application $app, Request $request)
     {
         $input = $request->request->all();
 
@@ -161,21 +146,16 @@ class UserController extends AbstractEntityController
     }
 
     /**
-     * @param Application $app
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     * @todo: throws
+     * {@inheritdoc}
      */
     public function getList(Application $app, Request $request)
     {
         // todo check perms
-        /**@var */
         $query = $app['db']->createQueryBuilder();
         $query->select()
             ->from()
             ->
         $app['db']->fetchAll();
         return 'list';
-        // TODO
     }
 }

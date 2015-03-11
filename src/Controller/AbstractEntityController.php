@@ -12,19 +12,19 @@ abstract class AbstractEntityController implements EntityControllerInterface
     /**
      * @param Application $app
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     * @todo: throws
+     * @param int $id
+     * @return mixed
      */
-    public function singleRouter(Application $app, Request $request, $id, $format)
+    public function singleRouter(Application $app, Request $request, $id = 1)
     {
-        return $this->{strtolower($request->getMethod())}($app, $request, $userId, $format);
+        return $this->{strtolower($request->getMethod())}($app, $request, $id);
     }
 
     /**
-     * @param $status string
-     * @param $data array
-     * @param $code int
-     * @return \Symfony\Component\HttpFoundation\Response|static
+     * @param string $status
+     * @param array $data
+     * @param int $code
+     * @return Response
      */
     protected function jsonResponse($status, $data, $code)
     {
@@ -34,6 +34,12 @@ abstract class AbstractEntityController implements EntityControllerInterface
         ], $code);
     }
 
+    /**
+     * @param string $status
+     * @param array $data
+     * @param int $code
+     * @return Response
+     */
     protected function xmlResponse($status, $data, $code)
     {
         return Response::create([
@@ -45,53 +51,48 @@ abstract class AbstractEntityController implements EntityControllerInterface
     /**
      * @param Application $app
      * @param Request $request
-     * @param $format 'json' or 'xml'
      * @return Response
      */
-    public function getList(Application $app, Request $request, $format) {
+    public function getList(Application $app, Request $request) {
         return $this->jsonResponse('error', ['message' => 'Not found.'], 400);
     }
 
     /**
      * @param Application $app
      * @param Request $request
-     * @param $roleId
-     * @param $format 'json' or 'xml'
+     * @param int $id
      * @return Response
      */
-    public function get(Application $app, Request $request, $roleId, $format) {
+    public function get(Application $app, Request $request, $id) {
         return $this->jsonResponse('error', ['message' => 'Not found.'], 400);
     }
 
     /**
      * @param Application $app
      * @param Request $request
-     * @param $format 'json' or 'xml'
      * @return Response
      */
-    public function post(Application $app, Request $request, $format) {
+    public function post(Application $app, Request $request) {
         return $this->jsonResponse('error', ['message' => 'Not found.'], 400);
     }
 
     /**
      * @param Application $app
      * @param Request $request
-     * @param $roleId
-     * @param $format 'json' or 'xml'
+     * @param int $id
      * @return Response
      */
-    public function put(Application $app, Request $request, $roleId, $format) {
+    public function put(Application $app, Request $request, $id) {
         return $this->jsonResponse('error', ['message' => 'Not found.'], 400);
     }
 
     /**
      * @param Application $app
      * @param Request $request
-     * @param $roleId
-     * @param $format 'json' or 'xml'
+     * @param int $id
      * @return Response
      */
-    public function delete(Application $app, Request $request, $roleId, $format) {
+    public function delete(Application $app, Request $request, $id) {
         return $this->jsonResponse('error', ['message' => 'Not found.'], 400);
     }
 }

@@ -16,13 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class RoleController extends AbstractEntityController
 {
 
-    /**
-     * @param Application $app
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     * @todo: throws
-     */
-    public function get(Application $app, Request $request, $roleId, $format)
+    public function get(Application $app, Request $request, $id)
     {
         //todo check permissions
         $query = $app['db']->createQueryBuilder()
