@@ -9,7 +9,6 @@ namespace APICMS\Controller;
 
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Silex\Application;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -36,12 +35,12 @@ class UserController extends AbstractEntityController
         );
 
         if (!$user) {
-            return $this->jsonResponse(AbstractEntityController::ERR_STATUS, [
-                'message' => AbstractEntityController::NOT_FOUND_MSG
+            return $this->jsonResponse(self::ERR_STATUS, [
+                'message' => self::NOT_FOUND_MSG
             ], 404);
         }
 
-        return $this->jsonResponse(AbstractEntityController::OK_STATUS, $user, 200);
+        return $this->jsonResponse(self::OK_STATUS, $user, 200);
     }
 
     /**
@@ -64,7 +63,7 @@ class UserController extends AbstractEntityController
             foreach ($errors as $e) {
                 $errorArray[$e->getPropertyPath()] = $e->getMessage();
             }
-            return $this->jsonResponse(AbstractEntityController::ERR_STATUS, $errorArray, 400);
+            return $this->jsonResponse(self::ERR_STATUS, $errorArray, 400);
         }
 
         // encrypt password
@@ -77,17 +76,20 @@ class UserController extends AbstractEntityController
         try {
             $app['db']->update('users', $input, ['id' => $userId]);
         } catch (UniqueConstraintViolationException $e) {
-            return $this->jsonResponse(AbstractEntityController::ERR_STATUS, [
+            return $this->jsonResponse(self::ERR_STATUS, [
                 '[email]' => 'This email address has already been registered.'
             ], 400);
         }
 
-        // clean up response
-        $userQuery = $app['db']->createQueryBuilder()
-            ->select('u.id, u.email, DATE_FORMAT(u.created, "%Y-%m-%dT%TZ") as created')
-            ->from('users', 'u');
-        $user = $app['db']->fetchAssoc($userQuery->getSQL(), $userQuery->getParameters());
-        return $this->jsonResponse(AbstractEntityController::OK_STATUS, $user, 200);
+        $roleQuery = $app['db']->createQueryBuilder()
+            ->select(self::SELECT_STATEMENT)
+            ->from('users', 'u')
+            ->where('u.id = :id')
+            ->setParameter('id', $userId);
+
+        $role = $app['db']->fetchAssoc($roleQuery->getSQL(), $roleQuery->getParameters());
+
+        return $this->jsonResponse(self::OK_STATUS, $role, 201);
     }
 
     /**
@@ -98,11 +100,11 @@ class UserController extends AbstractEntityController
         //todo check perms
         $affectedRows = $app['db']->delete('users', ['id' => $userId]);
         if ($affectedRows) {
-            return $this->jsonResponse(AbstractEntityController::OK_STATUS, ['message' => 'User deleted successfully.'], 200);
+            return $this->jsonResponse(self::OK_STATUS, ['message' => 'User deleted successfully.'], 200);
         } else {
             return $this->jsonResponse(
-                AbstractEntityController::ERR_STATUS,
-                ['message' => AbstractEntityController::NOT_FOUND_MSG],
+                self::ERR_STATUS,
+                ['message' => self::NOT_FOUND_MSG],
                 404
             );
         }
@@ -113,6 +115,7 @@ class UserController extends AbstractEntityController
      */
     public function post(Application $app, Request $request)
     {
+        //todo check perms
         $input = $request->request->all();
 
         // validation
@@ -129,7 +132,7 @@ class UserController extends AbstractEntityController
             foreach ($errors as $e) {
                 $errorArray[$e->getPropertyPath()] = $e->getMessage();
             }
-            return $this->jsonResponse(AbstractEntityController::ERR_STATUS, $errorArray, 400);
+            return $this->jsonResponse(self::ERR_STATUS, $errorArray, 400);
         }
 
         // encrypt password
@@ -140,17 +143,19 @@ class UserController extends AbstractEntityController
         try {
             $app['db']->insert('users', $input);
         } catch (UniqueConstraintViolationException $e) {
-            return $this->jsonResponse(AbstractEntityController::ERR_STATUS, [
+            return $this->jsonResponse(self::ERR_STATUS, [
                 '[email]' => 'This email address has already been registered.'
             ], 400);
         }
 
-        // clean up response
-        $response = $input;
-        unset($response['password']);
-        $response['id'] = $app['db']->lastInsertId();
+        $userQuery = $app['db']->createQueryBuilder()
+            ->select(self::SELECT_STATEMENT)
+            ->from('users', 'u')
+            ->where('u.id = :id')
+            ->setParameter('id', $app['db']->lastInsertId());
+        $user = $app['db']->fetchAssoc($userQuery->getSQL(), $userQuery->getParameters());
 
-        return $this->jsonResponse(AbstractEntityController::OK_STATUS, $response, 201);
+        return $this->jsonResponse(self::OK_STATUS, $user, 201);
     }
 
     /**
@@ -163,6 +168,6 @@ class UserController extends AbstractEntityController
         $query->select(self::SELECT_STATEMENT)
             ->from('users', 'u');
         $data = $app['db']->fetchAll($query->getSQL(), $query->getParameters());
-        return $this->jsonResponse(AbstractEntityController::OK_STATUS, $data, 200);
+        return $this->jsonResponse(self::OK_STATUS, $data, 200);
     }
 }

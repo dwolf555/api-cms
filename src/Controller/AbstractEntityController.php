@@ -2,6 +2,7 @@
 
 namespace APICMS\Controller;
 
+use Doctrine\DBAL\Connection;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -9,9 +10,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 abstract class AbstractEntityController implements EntityControllerInterface
 {
-    const OK_STATUS = 'ok';
     const ERR_STATUS = 'error';
-    const NOT_FOUND_MSG = 'Not found.';
+    const NOT_FOUND_MSG = 'Not Found';
+    const OK_STATUS = 'success';
+    const SELECT_STATEMENT = '*';
 
     /**
      * @param Application $app
