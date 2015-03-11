@@ -15,6 +15,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class UserController extends AbstractEntityController
 {
+    const SELECT_STATEMENT = 'u.id, u.email, DATE_FORMAT(u.created, "%Y-%m-%dT%TZ") as created';
+
 
     /**
      * {@inheritdoc}
@@ -23,7 +25,7 @@ class UserController extends AbstractEntityController
     {
         //todo check permissions
         $query = $app['db']->createQueryBuilder()
-            ->select('u.id, u.email, DATE_FORMAT(u.created, "%Y-%m-%dT%TZ") as created')
+            ->select(self::SELECT_STATEMENT)
             ->from('users', 'u')
             ->where('u.id = :user_id')
             ->setParameter('user_id', $userId);
@@ -52,10 +54,8 @@ class UserController extends AbstractEntityController
 
         // validation
         $inputConstraints = new Assert\Collection([
-            'email' => new Assert\Email(),
-            'password' => [
-                new Assert\Length(['min' => 8])
-            ]
+            'email' => new Assert\Optional(new Assert\Email()),
+            'password' => new Assert\Optional(new Assert\Length(['min' => 8]))
         ]);
         $errors = $app['validator']->validateValue($input, $inputConstraints);
 
@@ -83,11 +83,11 @@ class UserController extends AbstractEntityController
         }
 
         // clean up response
-        $response = $input;
-        unset($response['password']);
-        $response['id'] = $app['db']->lastInsertId();
-
-        return $this->jsonResponse(AbstractEntityController::OK_STATUS, $response, 200);
+        $userQuery = $app['db']->createQueryBuilder()
+            ->select('u.id, u.email, DATE_FORMAT(u.created, "%Y-%m-%dT%TZ") as created')
+            ->from('users', 'u');
+        $user = $app['db']->fetchAssoc($userQuery->getSQL(), $userQuery->getParameters());
+        return $this->jsonResponse(AbstractEntityController::OK_STATUS, $user, 200);
     }
 
     /**
@@ -160,7 +160,7 @@ class UserController extends AbstractEntityController
     {
         // todo check perms
         $query = $app['db']->createQueryBuilder();
-        $query->select('u.id, u.email, DATE_FORMAT(u.created, "%Y-%m-%dT%TZ") as created')
+        $query->select(self::SELECT_STATEMENT)
             ->from('users', 'u');
         $data = $app['db']->fetchAll($query->getSQL(), $query->getParameters());
         return $this->jsonResponse(AbstractEntityController::OK_STATUS, $data, 200);
