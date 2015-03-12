@@ -5,7 +5,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 $app = require __DIR__ . '/bootstrap.php';
 
-// Routes
+// Default routes
 $app->post('/login', 'APICMS\Controller\AuthController::login');
 $app->post('/logout', 'APICMS\Controller\AuthController::logout');
 $app->post('/forgot', 'APICMS\Controller\AuthController::forgot');
@@ -22,12 +22,13 @@ foreach (['user', 'role'] as $single) {
         ->method('GET|PUT|DELETE');
 }
 
-// Security
-$secureRoutes = [ // TODO: get secure routes list from config
-    '/',
-    '/admin'
-];
+
 $app->before(function (Request $request, \Silex\Application $app) use ($secureRoutes) {
+    // Security
+    $secureRoutes = [ // TODO: get secure routes list from config
+        '/',
+        '/admin'
+    ];
     if (in_array($request->getRequestUri(), $secureRoutes)) {
         $token = $request->headers->get('X-Auth-Token', false);
         if ($token !== false) {
@@ -35,26 +36,35 @@ $app->before(function (Request $request, \Silex\Application $app) use ($secureRo
             $user = $usersRepo->getUserByToken($token);
             if ($user) {
                 $app['user'] = $user;
-                return;
+            } else {
+                throw new \APICMS\Exception\RequiresAuthenticationException('Invalid Auth Token');
             }
+        } else {
+            throw new \APICMS\Exception\RequiresAuthenticationException('Invalid Auth Token');
         }
-        throw new \APICMS\Exception\RequiresAuthenticationException('Invalid Auth Token');
+    }
+
+    // REST API or Web App?
+    if (strpos($request->headers->get('Content-Type'), 'application/json') === 0) {
+        $data = json_decode($request->getContent(), true);
+        $request->request->replace(is_array($data) ? $data : array());
+    }
+    if (strpos($request->headers->get('Accept'), 'application/json') === 0) {//todo think this over
+        return Response::create('Web App Here', 200);
     }
 });
+
+// 404 fallback to single page app
+$app->error(function (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e) {
+    return Response::create('Web App Her 1e', 200);
+});
+
+// Authentication Error Handling
 $app->error(function (\APICMS\Exception\RequiresAuthenticationException $e, $code) {
     return new \Symfony\Component\HttpFoundation\JsonResponse([
         'status' => 'error',
         'message' => $e->getMessage()
     ], $code);
-});
-
-
-// Accepting JSON Body
-$app->before(function (Request $request) {
-    if (strpos($request->headers->get('Content-Type'), 'application/json') === 0) {
-        $data = json_decode($request->getContent(), true);
-        $request->request->replace(is_array($data) ? $data : array());
-    }
 });
 
 
