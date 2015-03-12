@@ -55,8 +55,10 @@ $app->before(function (Request $request, \Silex\Application $app) use ($secureRo
 });
 
 // 404 handling
-$app->error(function (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e) {
-
+$app->error(function (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e) use ($app) {
+    if (!$app['debug']) {
+        return Response::create(\APICMS\Controller\AbstractEntityController::NOT_FOUND_MSG, 404);
+    }
 });
 
 // Authentication Error Handling
