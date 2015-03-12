@@ -4,3 +4,4 @@ app/cache/
 app/logs/*
 !app/logs/empty
 frontend/node_modules
+frontend/scss/compiled
