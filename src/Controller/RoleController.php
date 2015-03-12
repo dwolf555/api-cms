@@ -36,12 +36,12 @@ class RoleController extends BaseController
         );
 
         if (!$role) {
-            return $this->jsonResponse(BaseController::ERR_STATUS, [
+            return $this->jsonResponse([
                 'message' => BaseController::NOT_FOUND_MSG
             ], 404);
         }
 
-        return $this->jsonResponse(BaseController::OK_STATUS, $role, 200);
+        return $this->jsonResponse($role, 200);
     }
 
     /**
@@ -62,14 +62,14 @@ class RoleController extends BaseController
             foreach ($errors as $e) {
                 $errorArray[$e->getPropertyPath()] = $e->getMessage();
             }
-            return $this->jsonResponse(BaseController::ERR_STATUS, $errorArray, 400);
+            return $this->jsonResponse($errorArray, 400);
         }
 
         // create role
         try {
             $app['db']->update('roles', $input, ['id' => $roleId]);
         } catch (UniqueConstraintViolationException $e) {
-            return $this->jsonResponse(BaseController::ERR_STATUS, [
+            return $this->jsonResponse([
                 '[name]' => 'This role has already been created.'
             ], 400);
         }
@@ -81,7 +81,7 @@ class RoleController extends BaseController
             ->setParameter('id', $roleId);
         $role = $app['db']->fetchAssoc($roleQuery->getSQL(), $roleQuery->getParameters());
 
-        return $this->jsonResponse(self::OK_STATUS, $role, 201);
+        return $this->jsonResponse($role, 201);
     }
 
     /**
@@ -92,9 +92,9 @@ class RoleController extends BaseController
         //todo check perms
         $affectedRows = $app['db']->delete('roles', ['id' => $roleId]);
         if ($affectedRows) {
-            return $this->jsonResponse(BaseController::OK_STATUS, ['message' => 'Role deleted successfully.'], 200);
+            return $this->jsonResponse(['message' => 'Role deleted successfully.'], 200);
         } else {
-            return $this->jsonResponse(BaseController::ERR_STATUS, ['message' => BaseController::NOT_FOUND_MSG], 404);
+            return $this->jsonResponse(['message' => BaseController::NOT_FOUND_MSG], 404);
         }
     }
 
@@ -116,14 +116,14 @@ class RoleController extends BaseController
             foreach ($errors as $e) {
                 $errorArray[$e->getPropertyPath()] = $e->getMessage();
             }
-            return $this->jsonResponse(BaseController::ERR_STATUS, $errorArray, 400);
+            return $this->jsonResponse($errorArray, 400);
         }
 
         // create role
         try {
             $app['db']->insert('roles', $input);
         } catch (UniqueConstraintViolationException $e) {
-            return $this->jsonResponse(BaseController::ERR_STATUS, [
+            return $this->jsonResponse([
                 '[name]' => 'This role has already been created.'
             ], 400);
         }
@@ -135,7 +135,7 @@ class RoleController extends BaseController
             ->setParameter('id', $app['db']->lastInsertId());
         $role = $app['db']->fetchAssoc($roleQuery->getSQL(), $roleQuery->getParameters());
 
-        return $this->jsonResponse(self::OK_STATUS, $role, 201);
+        return $this->jsonResponse($role, 201);
     }
 
     /**

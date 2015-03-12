@@ -29,15 +29,14 @@ abstract class AbstractEntityController implements EntityControllerInterface
     }
 
     /**
-     * @param string $status
      * @param array $data
      * @param int $code
      * @return Response
      */
-    protected function jsonResponse($status, $data, $code)
+    protected function jsonResponse($data, $code)
     {
         return JsonResponse::create([
-            'status' => $status,
+            'code' => $code,
             'data' => $data
         ], $code);
     }
@@ -50,6 +49,7 @@ abstract class AbstractEntityController implements EntityControllerInterface
      */
     protected function xmlResponse($status, $data, $code)
     {
+        // todo format this in xml
         return Response::create([
             'status' => $status,
             'data' => $data
@@ -68,16 +68,14 @@ abstract class AbstractEntityController implements EntityControllerInterface
         $results = $app['db']->fetchAll($query->getSQL(), $query->getParameters());
 
         if (count($results) === 0) {
-            return $this->jsonResponse(self::ERR_STATUS, [
+            return $this->jsonResponse([
                 'message' => self::NOT_FOUND_MSG
             ], 404);
         }
 
-        return $this->jsonResponse(self::OK_STATUS, [
+        return $this->jsonResponse([
             'pagination' => [
-                'total' => (int) $count,
-                'totalPages' => ceil($count / self::QUERY_LIMIT),
-                'page' => (int) $page
+                'records' => (int) $count
             ],
             'results' => $results
         ], 200);
@@ -89,7 +87,7 @@ abstract class AbstractEntityController implements EntityControllerInterface
      * @return Response
      */
     public function getList(Application $app, Request $request) {
-        return $this->jsonResponse('error', ['message' => 'Not found.'], 400);
+        return $this->jsonResponse(['message' => 'Not found.'], 400);
     }
 
     /**
@@ -99,7 +97,7 @@ abstract class AbstractEntityController implements EntityControllerInterface
      * @return Response
      */
     public function get(Application $app, Request $request, $id) {
-        return $this->jsonResponse('error', ['message' => 'Not found.'], 400);
+        return $this->jsonResponse(['message' => 'Not found.'], 400);
     }
 
     /**
@@ -108,7 +106,7 @@ abstract class AbstractEntityController implements EntityControllerInterface
      * @return Response
      */
     public function post(Application $app, Request $request) {
-        return $this->jsonResponse('error', ['message' => 'Not found.'], 400);
+        return $this->jsonResponse(['message' => 'Not found.'], 400);
     }
 
     /**
@@ -118,7 +116,7 @@ abstract class AbstractEntityController implements EntityControllerInterface
      * @return Response
      */
     public function put(Application $app, Request $request, $id) {
-        return $this->jsonResponse('error', ['message' => 'Not found.'], 400);
+        return $this->jsonResponse(['message' => 'Not found.'], 400);
     }
 
     /**
@@ -128,6 +126,6 @@ abstract class AbstractEntityController implements EntityControllerInterface
      * @return Response
      */
     public function delete(Application $app, Request $request, $id) {
-        return $this->jsonResponse('error', ['message' => 'Not found.'], 400);
+        return $this->jsonResponse(['message' => 'Not found.'], 400);
     }
 }
