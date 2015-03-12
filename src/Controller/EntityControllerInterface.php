@@ -14,7 +14,7 @@ interface EntityControllerInterface
      * @return Response
      */
     public function getList(Application $app, Request $request);
-    
+
     /**
      * @param Application $app
      * @param Request $request
