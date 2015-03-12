@@ -13,6 +13,9 @@
   },
   "homepage": "https://github.com/dwolf555/api-cms",
   "dependencies": {
-    "grunt": "^0.4.5"
+    "grunt": "^0.4.5",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-sass": "^0.18.1",
+    "load-grunt-tasks": "^3.1.0"
   }
 }

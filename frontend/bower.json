@@ -1,0 +1,28 @@
+{
+  "name": "api-cms",
+  "version": "0.0.1",
+  "homepage": "https://github.com/dwolf555/api-cms",
+  "authors": [
+    "Daniel Wolf <danielrwolf5@gmail.com>"
+  ],
+  "description": "API-CMS",
+  "main": "cms.html",
+  "moduleType": [
+    "amd",
+    "es6",
+    "globals"
+  ],
+  "keywords": [
+    "api",
+    "cms"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
