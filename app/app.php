@@ -5,13 +5,16 @@ use Symfony\Component\HttpFoundation\Response;
 
 $app = require __DIR__ . '/bootstrap.php';
 
-// Default routes
+// Stock routes
+$app->get('/cms{uri}', function (\Silex\Application $app, Request $request) {
+    return file_get_contents(dirname(__DIR__) . '/public_html/cms.html');
+})->assert('uri', '.+');
 $app->post('/api/login', 'APICMS\Controller\AuthController::login');
 $app->post('/api/logout', 'APICMS\Controller\AuthController::logout');
 $app->post('/api/forgot', 'APICMS\Controller\AuthController::forgot');
 $app->post('/api/reset', 'APICMS\Controller\AuthController::reset');
 
-// Base CRUD operations
+// Stock CRUD operations
 foreach (['user', 'role'] as $single) {
     $plural = $single . 's';
     $capital = ucfirst($single);
