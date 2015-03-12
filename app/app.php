@@ -6,18 +6,18 @@ use Symfony\Component\HttpFoundation\Response;
 $app = require __DIR__ . '/bootstrap.php';
 
 // Default routes
-$app->post('/login', 'APICMS\Controller\AuthController::login');
-$app->post('/logout', 'APICMS\Controller\AuthController::logout');
-$app->post('/forgot', 'APICMS\Controller\AuthController::forgot');
-$app->post('/reset', 'APICMS\Controller\AuthController::reset');
+$app->post('/api/login', 'APICMS\Controller\AuthController::login');
+$app->post('/api/logout', 'APICMS\Controller\AuthController::logout');
+$app->post('/api/forgot', 'APICMS\Controller\AuthController::forgot');
+$app->post('/api/reset', 'APICMS\Controller\AuthController::reset');
 
 // Base CRUD operations
 foreach (['user', 'role'] as $single) {
     $plural = $single . 's';
     $capital = ucfirst($single);
-    $app->get("/{$single}", "APICMS\\Controller\\{$capital}Controller::getList");
-    $app->post("/{$single}", "APICMS\\Controller\\{$capital}Controller::post");
-    $app->match("/{$single}/{id}", "APICMS\\Controller\\{$capital}Controller::singleRouter")
+    $app->get("/api/{$single}", "APICMS\\Controller\\{$capital}Controller::getList");
+    $app->post("/api/{$single}", "APICMS\\Controller\\{$capital}Controller::post");
+    $app->match("/api/{$single}/{id}", "APICMS\\Controller\\{$capital}Controller::singleRouter")
         ->assert('id', '\d+')
         ->method('GET|PUT|DELETE');
 }
@@ -49,14 +49,11 @@ $app->before(function (Request $request, \Silex\Application $app) use ($secureRo
         $data = json_decode($request->getContent(), true);
         $request->request->replace(is_array($data) ? $data : array());
     }
-    if (strpos($request->headers->get('Accept'), 'application/json') === 0) {//todo think this over
-        return Response::create('Web App Here', 200);
-    }
 });
 
-// 404 fallback to single page app
+// 404 handling
 $app->error(function (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e) {
-    return Response::create('Web App Her 1e', 200);
+
 });
 
 // Authentication Error Handling

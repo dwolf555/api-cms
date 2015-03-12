@@ -112,7 +112,7 @@
         <relationship name="values" type="0/0" destination="LMENVIRONMENTVARIABLEVALUE" idrefs="z108"></relationship>
     </object>
     <object type="LMENVIRONMENTVARIABLEVALUE" id="z108">
-        <attribute name="value" type="string">http://localhost:9999</attribute>
+        <attribute name="value" type="string">http://localhost:9999/api</attribute>
         <relationship name="environment" type="1/1" destination="LMENVIRONMENT" idrefs="z105"></relationship>
         <relationship name="variable" type="1/1" destination="LMENVIRONMENTVARIABLE" idrefs="z107"></relationship>
     </object>
@@ -145,7 +145,7 @@
         <attribute name="redirectauthorization" type="bool">0</attribute>
         <attribute name="method" type="string">POST</attribute>
         <attribute name="followredirects" type="bool">0</attribute>
-        <attribute name="body" type="string">[{"data":{"json":"{\\"email\\":\\"dan@gmail.com\\",\\"password\\":\\"mrwulf12\\"}"},"identifier":"com.luckymarmot.JSONDynamicValue"}]</attribute>
+        <attribute name="body" type="string">[{"data":{"json":"{\\"email\\":\\"asds@asda.com\\",\\"password\\":\\"mrwulf12\\"}"},"identifier":"com.luckymarmot.JSONDynamicValue"}]</attribute>
         <attribute name="order" type="int64">1</attribute>
         <attribute name="name" type="string">Create User</attribute>
         <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM" idrefs="z109"></relationship>
