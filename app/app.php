@@ -26,7 +26,7 @@ foreach (['user', 'role'] as $single) {
 }
 
 
-$app->before(function (Request $request, \Silex\Application $app) use ($secureRoutes) {
+$app->before(function (Request $request, \Silex\Application $app) {
     // Security
     $secureRoutes = [ // TODO: get secure routes list from config
         '/',
