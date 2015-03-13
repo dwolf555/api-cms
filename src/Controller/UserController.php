@@ -10,7 +10,6 @@ namespace APICMS\Controller;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class UserController extends AbstractEntityController
@@ -131,8 +130,7 @@ class UserController extends AbstractEntityController
         }
 
         // encrypt password
-        $encoder = $app['encoder.bcrypt'];
-        $input['password'] = $encoder->encodePassword($input['password'], null);
+        $input['password'] = $app['encoder.bcrypt']->encodePassword($input['password'], null);
 
         // create user
         try {

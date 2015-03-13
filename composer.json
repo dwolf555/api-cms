@@ -22,7 +22,8 @@
         "knplabs/console-service-provider": "dev-master",
         "robmorgan/phinx": "dev-master",
         "monolog/monolog": "1.13.*@dev",
-        "symfony/validator": "~3.0@dev"
+        "symfony/validator": "~3.0@dev",
+        "rhumsaa/uuid": "~2.8@dev"
     },
 
     "autoload": {
