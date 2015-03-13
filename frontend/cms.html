@@ -39,9 +39,7 @@
                             </li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
-                            <li class="active"><a href="./">Default <span class="sr-only">(current)</span></a></li>
-                            <li><a href="../navbar-static-top/">Static top</a></li>
-                            <li><a href="../navbar-fixed-top/">Fixed top</a></li>
+                            <li><a href="">Profile</a></li>
                         </ul>
                     </div><!--/.nav-collapse -->
                 </div><!--/.container-fluid -->
@@ -54,5 +52,16 @@
         </main>
         <script src="/bower_components/jquery/dist/jquery.min.js"></script>
         <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script>
+            (function () { // load livereload on localhost
+                if (window.location.origin.search('localhost') !== -1) {
+                    var head = document.getElementsByTagName('head')[0],
+                            script = document.createElement('script');
+                    script.type = 'text/javascript';
+                    script.src = '//localhost:35729/livereload.js';
+                    head.appendChild(script);
+                }
+            })();
+        </script>
     </body>
 </html>
