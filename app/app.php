@@ -15,7 +15,7 @@ $app->post('/api/forgot', 'APICMS\Controller\AuthController::forgot');
 $app->post('/api/reset', 'APICMS\Controller\AuthController::reset');
 
 // Stock CRUD operations
-foreach (['user', 'role', 'entity', 'record'] as $single) {
+foreach (['user', 'role', 'entity', 'field'] as $single) {
     $capital = ucfirst($single);
     $app->get("/api/{$single}", "APICMS\\Controller\\{$capital}Controller::getList");
     $app->post("/api/{$single}", "APICMS\\Controller\\{$capital}Controller::post");
