@@ -239,7 +239,7 @@
         <relationship name="urlparameters" type="0/0" destination="LMKEYVALUE"></relationship>
     </object>
     <object type="LMREQUEST" id="z119">
-        <attribute name="body" type="string">[{"data":{"json":"{\\"name\\":\\"aasdffd\\"}"},"identifier":"com.luckymarmot.JSONDynamicValue"}]</attribute>
+        <attribute name="body" type="string">[{"data":{"json":"{\\"name\\":\\"testrole\\"}"},"identifier":"com.luckymarmot.JSONDynamicValue"}]</attribute>
         <attribute name="uuid" type="string">9DF1C569-A992-443F-9FF1-BECB7F811E46</attribute>
         <attribute name="url" type="string">[{"data":{"environmentVariable":"B8E7287F-3301-40E9-BF3E-342D0D616C5D"},"identifier":"com.luckymarmot.EnvironmentVariableDynamicValue"},"\\/role"]</attribute>
         <attribute name="storecookies" type="bool">1</attribute>
