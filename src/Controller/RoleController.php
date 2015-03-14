@@ -87,15 +87,10 @@ class RoleController extends BaseController
     /**
      * {@inheritdoc}
      */
-    public function delete(Application $app, Request $request, $roleId)
+    public function delete(Application $app, Request $request, $id)
     {
-        //todo check perms
-        $affectedRows = $app['db']->delete('roles', ['id' => $roleId]);
-        if ($affectedRows) {
-            return $this->jsonResponse(['message' => 'Role deleted successfully.'], 200);
-        } else {
-            return $this->jsonResponse(['message' => BaseController::NOT_FOUND_MSG], 404);
-        }
+        // todo check perms
+        return $this->deleteEntity($app['db'], 'roles', 'Role', $id);
     }
 
     /**

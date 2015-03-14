@@ -14,15 +14,12 @@ class EntityController extends AbstractEntityController {
 
     const SELECT_STATEMENT = 'e.id, e.name, DATE_FORMAT(e.created, "%Y-%m-%dT%TZ") as created';
 
+    /**
+     * {@inheritdoc}
+     */
     public function delete(Application $app, Request $request, $id)
     {
-        //todo check perms
-        $affectedRows = $app['db']->delete('entities', ['id' => $id]); // todo abstract this
-        if ($affectedRows) {
-            return $this->jsonResponse(['message' => 'Entity deleted successfully.'], 200);
-        } else {
-            return $this->jsonResponse(['message' => self::NOT_FOUND_MSG], 404);
-        }
+        return $this->deleteEntity($app['db'], 'entities', 'Entity', $id);
     }
 
     /**

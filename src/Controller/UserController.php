@@ -93,15 +93,10 @@ class UserController extends AbstractEntityController
     /**
      * {@inheritdoc}
      */
-    public function delete(Application $app, Request $request, $userId)
+    public function delete(Application $app, Request $request, $id)
     {
-        //todo check perms
-        $affectedRows = $app['db']->delete('users', ['id' => $userId]); // todo abstract this
-        if ($affectedRows) {
-            return $this->jsonResponse(['message' => 'User deleted successfully.'], 200);
-        } else {
-            return $this->jsonResponse(['message' => self::NOT_FOUND_MSG], 404);
-        }
+        // todo check perms
+        return $this->deleteEntity($app['db'], 'users', 'User', $id);
     }
 
     /**

@@ -128,4 +128,13 @@ abstract class AbstractEntityController implements EntityControllerInterface
     public function delete(Application $app, Request $request, $id) {
         return $this->jsonResponse(['message' => 'Not found.'], 404);
     }
+
+    protected function deleteEntity(Connection $conn, $tableName, $entityName, $id){
+        $affectedRows = $conn->delete($tableName, ['id' => $id]);
+        if ($affectedRows) {
+            return $this->jsonResponse(['message' => $entityName . ' deleted successfully.'], 200);
+        } else {
+            return $this->jsonResponse(['message' => self::NOT_FOUND_MSG], 404);
+        }
+    }
 }
