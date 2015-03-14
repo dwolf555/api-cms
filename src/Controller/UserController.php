@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class UserController extends AbstractEntityController
 {
-    const SELECT_STATEMENT = 'u.id, u.email, DATE_FORMAT(u.created, "%Y-%m-%dT%TZ") as created';
+    const SELECT_STATEMENT = 'u.id user_id, u.email, DATE_FORMAT(u.created, "%Y-%m-%dT%TZ") as created';
 
 
     /**
@@ -52,7 +52,8 @@ class UserController extends AbstractEntityController
         // validation
         $inputConstraints = new Assert\Collection([
             'email' => new Assert\Optional(new Assert\Email()),
-            'password' => new Assert\Optional(new Assert\Length(['min' => 8]))
+            'password' => new Assert\Optional(new Assert\Length(['min' => 8])),
+            'roles' => new Assert\Optional(new Assert\Type('array')) // todo validate array (Assert\Collection?)
         ]);
         $errors = $app['validator']->validateValue($input, $inputConstraints);
 
@@ -70,6 +71,11 @@ class UserController extends AbstractEntityController
             $input['password'] = $encoder->encodePassword($input['password'], null);
         }
 
+        if (isset($input['roles'])) {
+            $roles = $input['roles'];
+            unset($input['roles']);
+        }
+
         // update user
         try {
             $app['db']->update('users', $input, ['id' => $userId]);
@@ -79,11 +85,57 @@ class UserController extends AbstractEntityController
             ], 400);
         }
 
+        if (isset($roles)) {
+            $newRoles = [];
+            foreach ($roles as $inputRole) {
+                if (isset($inputRole['role_id'])) {
+                    $newRoles[] = $inputRole['role_id'];
+                } else if (preg_match('/^[0-9]{1,}$/', $inputRole)) { // wouldn't be required if we had validation above
+                    $newRoles[] = $inputRole;
+                } else {
+                    // todo throw error here or validate above (above is better)
+                }
+            }
+
+            $currentRoles = [];
+            $currentRolesQuery = $app['db']->createQueryBuilder()
+                ->select('ur.role_id')
+                ->from('users_roles', 'ur')
+                ->where('ur.user_id = :userId')
+                ->setParameter('userId', $userId);
+            $currentRolesResults = $app['db']->fetchAll($currentRolesQuery->getSQL(), $currentRolesQuery->getParameters());
+            foreach ($currentRolesResults as $roleResult) {
+                $currentRoles[] = $roleResult['role_id'];
+            }
+
+            $rolesToInsert = array_diff($newRoles, $currentRoles);
+            $rolesToDelete = array_diff($currentRoles, $newRoles);
+            if (count($rolesToDelete)) {
+                $deleteQB = $app['db']->createQueryBuilder()
+                    ->delete('users_roles', 'ur')
+                    ->where('ur.role_id IN(:rolesToDelete)')
+                    ->setParameter('rolesToDelete', $rolesToDelete);
+                $app['db']->executeQuery($deleteQB->getSQL(), $deleteQB->getParameters());
+            }
+
+            foreach ($rolesToInsert as $roleId) {
+                try {
+                    $app['db']->insert('users_roles', ['user_id' => $userId, 'role_id' => $roleId]);
+                } catch (UniqueConstraintViolationException $e) {}
+            }
+        }
+
         $roleQuery = $app['db']->createQueryBuilder()
             ->select(self::SELECT_STATEMENT)
             ->from('users', 'u')
             ->where('u.id = :id')
             ->setParameter('id', $userId);
+
+        if (isset($roles)) {
+            $roleQuery->addSelect('GROUP_CONCAT(r.id) roles, r.name')
+                ->leftJoin('u', 'users_roles', 'ur', 'ur.user_id = u.id')
+                ->innerJoin('ur', 'roles', 'r', 'r.id = ur.role_id');
+        }
 
         $role = $app['db']->fetchAssoc($roleQuery->getSQL(), $roleQuery->getParameters());
 

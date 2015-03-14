@@ -16,7 +16,7 @@ use APICMS\Controller\AbstractEntityController as BaseController;
 
 class RoleController extends BaseController
 {
-    const SELECT_STATEMENT = 'r.id, r.name, DATE_FORMAT(r.created, "%Y-%m-%dT%TZ") as created';
+    const SELECT_STATEMENT = 'r.id role_id, r.name, DATE_FORMAT(r.created, "%Y-%m-%dT%TZ") as created';
 
     /**
      * {@inheritdoc}

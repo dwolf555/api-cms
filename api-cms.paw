@@ -179,14 +179,14 @@
     </object>
     <object type="LMREQUEST" id="z114">
         <attribute name="uuid" type="string">3B8BA20E-AF33-4AC2-8CAC-466CDF8D3B39</attribute>
-        <attribute name="url" type="string">[{"data":{"environmentVariable":"B8E7287F-3301-40E9-BF3E-342D0D616C5D"},"identifier":"com.luckymarmot.EnvironmentVariableDynamicValue"},"\\/user\\/",{"data":{"request":"0F6A9578-7119-474D-BADC-C232A8765593","keyPath":"data.id","format":0},"identifier":"com.luckymarmot.ResponseBodyPathDynamicValue"}]</attribute>
+        <attribute name="url" type="string">[{"data":{"environmentVariable":"B8E7287F-3301-40E9-BF3E-342D0D616C5D"},"identifier":"com.luckymarmot.EnvironmentVariableDynamicValue"},"\\/user\\/",{"data":{"request":"0F6A9578-7119-474D-BADC-C232A8765593","keyPath":"data.user_id","format":0},"identifier":"com.luckymarmot.ResponseBodyPathDynamicValue"}]</attribute>
         <attribute name="storecookies" type="bool">1</attribute>
         <attribute name="sendcookies" type="bool">1</attribute>
         <attribute name="redirectmethod" type="bool">0</attribute>
         <attribute name="redirectauthorization" type="bool">0</attribute>
         <attribute name="method" type="string">PUT</attribute>
         <attribute name="followredirects" type="bool">0</attribute>
-        <attribute name="body" type="string">[{"data":{"json":"{\\"email\\":\\"asdf@punchkick.com\\"}"},"identifier":"com.luckymarmot.JSONDynamicValue"}]</attribute>
+        <attribute name="body" type="string">[{"data":{"json":"{\\"email\\":\\"asdf@punchkick.com\\",\\"roles\\":[\\"1\\"]}"},"identifier":"com.luckymarmot.JSONDynamicValue"}]</attribute>
         <attribute name="order" type="int64">3</attribute>
         <attribute name="name" type="string">Update User</attribute>
         <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM" idrefs="z109"></relationship>

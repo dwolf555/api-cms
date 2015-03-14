@@ -25,8 +25,9 @@ class CreateUsersRolesTable extends AbstractMigration
         $this->table('users_roles')
             ->addColumn('user_id', 'integer')
             ->addColumn('role_id', 'integer')
-            ->addForeignKey('user_id', 'users', 'id', ['on_delete' => 'cascade'])
-            ->addForeignKey('role_id', 'roles', 'id')
+            ->addForeignKey('user_id', 'users', 'id', ['delete' => 'cascade'])
+            ->addForeignKey('role_id', 'roles', 'id', ['delete' => 'cascade'])
+            ->save();
 
     }
 
@@ -35,6 +36,6 @@ class CreateUsersRolesTable extends AbstractMigration
      */
     public function down()
     {
-
+        $this->dropTable('users_roles');
     }
 }

@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class EntityController extends AbstractEntityController {
 
-    const SELECT_STATEMENT = 'e.id, e.name, DATE_FORMAT(e.created, "%Y-%m-%dT%TZ") as created';
+    const SELECT_STATEMENT = 'e.id entity_id, e.name, DATE_FORMAT(e.created, "%Y-%m-%dT%TZ") as created';
 
     /**
      * {@inheritdoc}
