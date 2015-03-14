@@ -32,13 +32,16 @@ module.exports = function(grunt) {
             options: {
                 livereload: true
             },
-            scss: {
-                files: ['scss/**.scss'],
-                tasks: ['clean', 'sass:dev', 'copy']
+            html: {
+                files: ['../public_html/cms/index.html']
             },
             js: {
                 files: ['js/**.js'],
                 tasks: ['']
+            },
+            scss: {
+                files: ['scss/**.scss'],
+                tasks: ['clean', 'sass:dev', 'copy']
             }
         }
     });

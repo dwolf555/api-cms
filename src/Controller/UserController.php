@@ -96,7 +96,7 @@ class UserController extends AbstractEntityController
     public function delete(Application $app, Request $request, $userId)
     {
         //todo check perms
-        $affectedRows = $app['db']->delete('users', ['id' => $userId]);
+        $affectedRows = $app['db']->delete('users', ['id' => $userId]); // todo abstract this
         if ($affectedRows) {
             return $this->jsonResponse(['message' => 'User deleted successfully.'], 200);
         } else {
@@ -157,9 +157,11 @@ class UserController extends AbstractEntityController
     public function getList(Application $app, Request $request)
     {
         // todo check perms
-        $query = $app['db']->createQueryBuilder();
-        $query->select(self::SELECT_STATEMENT)
-            ->from('users', 'u');
-        return $this->paginate($app, $query);
+        return $this->paginate(
+            $app,
+            $app['db']->createQueryBuilder()
+                ->select(self::SELECT_STATEMENT)
+                ->from('users', 'u')
+        );
     }
 }
