@@ -15,7 +15,7 @@ $app->post('/api/forgot', 'APICMS\Controller\AuthController::forgot');
 $app->post('/api/reset', 'APICMS\Controller\AuthController::reset');
 
 // Stock CRUD operations
-foreach (['user', 'role', 'entity', 'field'] as $single) {
+foreach (['user', 'role', 'entity', 'field'] as $single) { //todo make field a nest resource of entity?
     $capital = ucfirst($single);
     $app->get("/api/{$single}", "APICMS\\Controller\\{$capital}Controller::getList");
     $app->post("/api/{$single}", "APICMS\\Controller\\{$capital}Controller::post");
@@ -24,10 +24,18 @@ foreach (['user', 'role', 'entity', 'field'] as $single) {
         ->method('GET|PUT|DELETE');
 }
 
+// Roles and Users relationship management
+$app->get('/api/user/{userId}/roles', 'APICMS\\Controller\\UserController::getRoles');
+$app->put('/api/user/{userId}/roles', 'APICMS\\Controller\\UserController::putRoles');
+$app->put('/api/user/{userId}/roles/{roleId}', 'APICMS\\Controller\\UserController::deleteRole');
+
+$app->get('/api/role/{roleId}/users', 'APICMS\\Controller\\RoleController::getUsers');
+$app->put('/api/role/{roleId}/users', 'APICMS\\Controller\\RoleController::putUsers');
+$app->delete('/api/role/{roleId}/users/{userId}', 'APICMS\\Controller\\RoleController::deleteUser');
 
 $app->before(function (Request $request, \Silex\Application $app) {
     // Security
-    $secureRoutes = [ // TODO: get secure routes list from config
+    $secureRoutes = [ // TODO: get secure routes list from config (or db?)
         '/',
         '/admin'
     ];

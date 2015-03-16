@@ -10,6 +10,7 @@ namespace APICMS\Controller;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class UserController extends AbstractEntityController
@@ -210,5 +211,39 @@ class UserController extends AbstractEntityController
                 ->select(self::SELECT_STATEMENT)
                 ->from('users', 'u')
         );
+    }
+
+    /**
+     * @param Application $app
+     * @param Request $request
+     * @param int $id
+     * @return Response
+     */
+    public function getRoles(Application $app, Request $request, $userId)
+    {
+        return Response::create(); // todo
+    }
+
+    /**
+     * @param Application $app
+     * @param Request $request
+     * @param int $userId
+     * @return Response
+     */
+    public function putRoles(Application $app, Request $request, $userId)
+    {
+        return Response::create();//todo
+    }
+
+    /**
+     * @param Application $app
+     * @param Request $request
+     * @param int $userId
+     * @param int $roleId
+     * @return Response
+     */
+    public function deleteRole(Application $app, Request $request, $userId, $roleId)
+    {
+        return Response::create();//todo
     }
 }
